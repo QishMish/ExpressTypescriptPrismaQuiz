@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  email     String      @unique
+  username  String      @unique
+  password  String
+  roles     Role[]
+  userRoles UserRoles[]
+  quetions  Question[]
+
+  @@map("users")
+}
+
+model Role {
+  id        Int         @id @default(autoincrement())
+  name      String
+  users     User[]
+  userRoles UserRoles[]
+
+  @@map("roles")
+}
+
+model UserRoles {
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId Int
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  roleId Int
+
+  @@id([userId, roleId])
+  @@map("user_roles")
+}
+
+model Question {
+  id                 Int                 @id @default(autoincrement())
+  question           String
+  isActive           Boolean             @default(true)
+  category           Category            @relation(fields: [categoryId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  categoryId         Int
+  questionChoices    QuestionChoice[]
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId             Int
+  type               Type                @relation(fields: [typeCategory], references: [type], onDelete: Cascade, onUpdate: Cascade)
+  typeCategory       QuestionTypes
+  difficulty         Difficulty          @relation(fields: [difficultyCategory], references: [difficulty], onDelete: Cascade, onUpdate: Cascade)
+  difficultyCategory QuetionDifficulties
+
+  @@map("questions")
+}
+
+model Category {
+  id       Int        @id @default(autoincrement())
+  category String     @unique
+  quetions Question[]
+
+  @@map("categories")
+}
+
+model Type {
+  id       Int           @id @default(autoincrement())
+  type     QuestionTypes @unique
+  Question Question[]
+
+  @@map("types")
+}
+
+model Difficulty {
+  id         Int                 @id @default(autoincrement())
+  difficulty QuetionDifficulties @unique
+  Question   Question[]
+
+  @@map("difficulties")
+}
+
+model QuestionChoice {
+  id         Int       @id @default(autoincrement())
+  choice     String
+  isCorrect  Boolean
+  question   Question? @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  questionId Int?
+
+  @@map("quetion_choices")
+}
+
+enum QuestionTypes {
+  multiple
+  boolean
+}
+
+enum QuetionDifficulties {
+  easy
+  medium
+  hard
+}

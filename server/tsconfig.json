@@ -1,0 +1,29 @@
+{
+   "compilerOptions": {
+      "lib": [
+         "es5",
+         "es6"
+      ],
+      "strict": true,
+      "target": "es6",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "baseUrl": "./src",
+      "outDir": "./build",
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "strictPropertyInitialization": false,
+      "allowSyntheticDefaultImports": true,
+      "paths": {
+         "@/resources/*": ["resources/*"],
+         "@/utils/*": ["utils/*"],
+         "@/middleware/*": ["middleware/*"],
+         "@/uploads/*": ["uploads/*"],
+         "@/libs/*": ["libs/*"],
+         "@/entity/*": ["entity/*"],
+         "@/config/*": ["config/*"]
+       }
+   }
+}
